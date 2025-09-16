@@ -1,8 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
-import tailwindcss from "@tailwindcss/vite";
-import Icons from "unplugin-icons/vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import viteCompression from "vite-plugin-compression";
 
@@ -12,19 +10,15 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       vue(),
-      tailwindcss(),
-      Icons({
-        compiler: "vue3"
-      }),
       // 打包分析插件
       process.env.npm_lifecycle_event === "report"
-        ? visualizer({ open: true, gzipSize: true, filename: "report.html" })
+        ? visualizer({ open: true, brotliSize: true, filename: "report.html" })
         : (null as any),
       // 压缩插件
       mode === "production"
         ? viteCompression({
-            algorithm: "gzip",
-            ext: ".gz",
+            algorithm: "brotliCompress",
+            ext: ".br",
             threshold: 10240,
             compressionOptions: {
               level: 9
@@ -32,13 +26,13 @@ export default defineConfig(({ mode }) => {
           })
         : (null as any)
     ].filter(Boolean),
-
+    // 设置别名
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url))
       }
     },
-
+    // 本地开发服务器配置
     server: {
       port: env.VITE_PORT ? parseInt(env.VITE_PORT, 10) : 3000,
       host: "0.0.0.0",
@@ -53,6 +47,7 @@ export default defineConfig(({ mode }) => {
         clientFiles: ["./index.html", "./src/{views,components}/**/*"]
       }
     },
+    // 生产环境构建配置
     build: {
       target: "es2015",
       sourcemap: false,
