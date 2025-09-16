@@ -1,9 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>hello</div>
+  <router-view />
 </template>
-
-<style lang="scss" scoped>
-$local-color: #42b983;
-</style>
