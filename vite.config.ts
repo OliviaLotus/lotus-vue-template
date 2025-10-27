@@ -3,11 +3,17 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { visualizer } from "rollup-plugin-visualizer";
 import viteCompression from "vite-plugin-compression";
+import cssnanoPlugin from "cssnano";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   console.log(`Current mode: ${mode}`);
   return {
+    css: {
+      postcss: {
+        plugins: [mode === "production" ? cssnanoPlugin() : (null as any)]
+      }
+    },
     plugins: [
       vue(),
       // 打包分析插件
