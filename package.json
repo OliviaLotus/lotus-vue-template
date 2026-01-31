@@ -17,7 +17,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@pinia/colada": "^0.21.2",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.13.4",
     "dayjs": "^1.11.19",
